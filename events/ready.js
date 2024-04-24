@@ -11,7 +11,7 @@ const client = require(process.cwd() + '/index.js')
 client.on("ready", async (client) => {
   const serverCount = client.guilds.cache.size;
   client.user.setActivity({
-    name: '+help',
+    name: '/music <command>',
     type: ActivityType.Watching,
   });
   await client.application.commands.set(client.slashCommands.map(command => command.data));
