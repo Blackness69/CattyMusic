@@ -4,7 +4,7 @@ module.exports = {
   name: 'play',
   aliases: ['p'],
   description: 'Play a song',
-  async execute({msg}) {
+  async execute({msg args}) {
     const guild = msg.guild;
     const query = args[0].join(' ');
     const channel = msg.channel;
