@@ -5,10 +5,11 @@ const client = require(process.cwd() + '/index.js');
 
 client.on("messageCreate", async msg => {
   if (!msg.content || msg.author.bot) return;
+  const prefix = await getPrefix(msg.guild.id);
 
   const botMention = msg.content === `<@${client.user.id}>`;
   if (botMention) {
-    return msg.reply(`Who pinged me? Oh hey ${msg.author.displayName}! Nice to meet you <3`);
+    return msg.reply(`Who pinged me? Oh hey ${msg.author.displayName}! My prefix for this server is ${prefix}`);
   }
 
   const customPrefix = (await getPrefix(msg.guild.id)).toLowerCase();
