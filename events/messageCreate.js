@@ -1,5 +1,4 @@
 // messageCreate.js
-
 const { getPrefix, ownerIds } = require('../config');
 const Discord = require('discord.js');
 const client = require(process.cwd() + '/index.js');
@@ -12,21 +11,25 @@ client.on("messageCreate", async msg => {
     return msg.reply(`Who pinged me? Oh hey ${msg.author.displayName}! Nice to meet you <3`);
   }
 
-  const currentPrefix = (await getPrefix(msg.guild.id)).toLowerCase();
-  if (!msg.content.toLowerCase().startsWith(currentPrefix) && !msg.content.toLowerCase().startsWith("+") || msg.author.bot) return;
+  const customPrefix = (await getPrefix(msg.guild.id)).toLowerCase();
+  const defaultPrefix = "+";
+  let messageContent = msg.content.toLowerCase(); // Declare as let
 
-  let prefixLength = msg.content.toLowerCase().startsWith(currentPrefix) ? currentPrefix.length : 2;
-  if (!msg.content.toLowerCase().startsWith(currentPrefix)) {
-    prefixLength = 1; // Default prefix length '+'
+  // Check if the message starts with the custom prefix or with the default prefix "+"
+  if (!messageContent.startsWith(customPrefix) && !messageContent.startsWith(defaultPrefix)) return;
+
+  let prefixLength = customPrefix.length;
+  if (!messageContent.startsWith(customPrefix)) {
+    prefixLength = defaultPrefix.length; // Default prefix length '+'
   }
 
-  const args = msg.content.slice(prefixLength).trim().split(/ +/);
+  const args = messageContent.slice(prefixLength).trim().split(/ +/);
 
   const commandName = args.shift().toLowerCase();
   const command = client.commands.get(commandName) || client.commands.get(client.aliases.get(commandName));
   if (command) {
     try {
-      await command.execute({ client, Discord, args, prefix: currentPrefix, msg });
+      await command.execute({ client, Discord, args, prefix: customPrefix, msg });
     } catch (error) {
       console.error(error);
       return msg.reply('There was an error executing that command!');
